@@ -10,20 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.nn.accounting_service.dto.UserForm;
 import br.com.nn.accounting_service.dto.UserView;
-import br.com.nn.accounting_service.model.User;
-import br.com.nn.accounting_service.repository.UserRepository;
+import br.com.nn.accounting_service.service.UserService;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationController {
 	
 	@Autowired
-	UserRepository userRepository;
+	UserService userService;
 	
 	@PostMapping("/signup")
 	public UserView registerUser(@Valid @RequestBody UserForm userForm) {
-		User user = new User(userForm);
-		userRepository.save(user);
-		return new UserView(user.getId(), user.getName(), user.getLastname(), user.getEmail());
+		return userService.registerUser(userForm);
 	}
 }
