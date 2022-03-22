@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.nn.accounting_service.dto.UserForm;
 import br.com.nn.accounting_service.dto.UserView;
+import br.com.nn.accounting_service.exception.BadRequestException;
 import br.com.nn.accounting_service.model.User;
 import br.com.nn.accounting_service.repository.UserRepository;
 
@@ -15,6 +16,10 @@ public class UserService {
 	UserRepository userRepository;
 	
 	public UserView registerUser(UserForm userForm) {
+		if (userRepository.existsByEmailIgnoreCase(userForm.getEmail())) {
+			throw new BadRequestException("User exist!");
+		}
+		
 		User user = new User(userForm);
 		userRepository.save(user);
 		return new UserView(user.getId(), user.getName(), user.getLastname(), user.getEmail());

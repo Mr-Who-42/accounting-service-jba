@@ -1,5 +1,6 @@
 package br.com.nn.accounting_service.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +19,7 @@ public class User {
 	@NotBlank
 	private String lastname;
 	@NotBlank
+	@Column(unique = true)
 	private String email;
 	@NotBlank
 	private String password;

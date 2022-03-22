@@ -7,5 +7,5 @@ import br.com.nn.accounting_service.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
-
+	boolean existsByEmailIgnoreCase(String email);
 }
