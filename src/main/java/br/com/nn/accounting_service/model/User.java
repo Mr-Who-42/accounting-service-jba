@@ -27,11 +27,11 @@ public class User {
 	public User() {
 	}
 	
-	public User(UserForm userForm){
+	public User(UserForm userForm, String password){
 		this.name = userForm.getName();
 		this.lastname = userForm.getLastname();
 		this.email = userForm.getEmail();
-		this.password = userForm.getPassword();
+		this.password = password;
 	}
 
 	public long getId() {
