@@ -2,21 +2,30 @@ package br.com.nn.accounting_service.config.security.authentication;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import br.com.nn.accounting_service.model.User;
 
 public class UserDetailsImpl implements UserDetails{
 
 	private static final long serialVersionUID = 1L;
 	private final String username;
 	private final String password;
+	private final boolean enabled;
 	private final List<GrantedAuthority> rolesAndAuthorities;
 	
-	public UserDetailsImpl(String username, String password) {
-		this.username = username;
-		this.password = password;
-		this.rolesAndAuthorities = List.of();
+	public UserDetailsImpl(User user) {
+		this.username = user.getEmail();
+		this.password = user.getPassword();
+		this.enabled = user.isEnabled();
+		this.rolesAndAuthorities = user.getUserGroups().stream()
+				.map(userGroup->userGroup.getName().toUpperCase())
+				.map(SimpleGrantedAuthority::new)
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -51,7 +60,7 @@ public class UserDetailsImpl implements UserDetails{
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return enabled;
 	}
 
 }

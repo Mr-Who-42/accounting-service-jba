@@ -38,6 +38,7 @@ public class AuthenticationController {
 			@AuthenticationPrincipal UserDetailsImpl userDetails){
 		
 		userService.changePass(userDetails, passChangeForm.getNewPassword());
+		
 		HashMap<String, String> response = new HashMap<String, String>();
 		response.put("email", userDetails.getUsername());
 		response.put("status", "password has been updated successfully!");

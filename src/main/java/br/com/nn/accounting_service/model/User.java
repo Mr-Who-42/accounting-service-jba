@@ -1,11 +1,20 @@
 package br.com.nn.accounting_service.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import br.com.nn.accounting_service.dto.UserForm;
 
@@ -23,15 +32,28 @@ public class User {
 	private String email;
 	@NotBlank
 	private String password;
+	@NotNull
+	private boolean enabled = true;
+	@ManyToMany(cascade = {
+			CascadeType.PERSIST,
+			CascadeType.MERGE
+	}, fetch = FetchType.EAGER)
+	@JoinTable(name = "user_groups",
+		joinColumns = @JoinColumn(name = "user_id"),
+		inverseJoinColumns = @JoinColumn(name = "group_id"))
+	private Set<PrincipleGroup> userGroups = new HashSet<>();
 	
-	public User() {
-	}
+	public User() {}
 	
 	public User(UserForm userForm, String password){
 		this.name = userForm.getName();
 		this.lastname = userForm.getLastname();
 		this.email = userForm.getEmail();
 		this.password = password;
+	}
+	
+	public void addUserGroups(PrincipleGroup groups) {
+		this.userGroups.add(groups);
 	}
 
 	public long getId() {
@@ -72,6 +94,22 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enable) {
+		this.enabled = enable;
+	}
+
+	public Set<PrincipleGroup> getUserGroups() {
+		return userGroups;
+	}
+
+	public void setUserGroups(Set<PrincipleGroup> userGroups) {
+		this.userGroups = userGroups;
 	}
 	
 	
