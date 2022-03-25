@@ -1,16 +1,23 @@
 package br.com.nn.accounting_service.dto;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
+import br.com.nn.accounting_service.config.validation.NotWeakPassword;
 
 public class UserForm {
-	@NotEmpty
+	@NotBlank(message="Name must not be blank!")
 	private String name;
-	@NotEmpty
+	@NotBlank(message="Lastname must not be blank!")
 	private String lastname;
-	@Email
+	@NotBlank(message="Email must not be blank!")
+	@Email(regexp=".*@acme\\.com$", message="Must be valid email from ACME!")
 	private String email;
-	@NotEmpty
+	@NotBlank
+	@Size(min=12, message="Password lenght must be 12 chars minimum!")
+	@NotWeakPassword
 	private String password;
 	
 	public UserForm() {
