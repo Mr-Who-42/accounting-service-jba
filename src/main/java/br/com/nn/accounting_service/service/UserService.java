@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,8 +45,11 @@ public class UserService {
 					.findById(Group.USER.getId())
 					.get());
 		}
-		
-		userRepository.save(user);
+		try {			
+			userRepository.save(user);
+		} catch (DataIntegrityViolationException e) {
+			throw new BadRequestException("User exist!");
+		}
 		return new UserView(user.getId(), user.getName(), user.getLastname(), user.getEmail(), user.getUserGroups());
 	}
 	
