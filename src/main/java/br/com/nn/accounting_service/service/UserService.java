@@ -37,7 +37,7 @@ public class UserService {
 		User user = new User(userForm, passwordEncoder.encode(userForm.getPassword()));
 		Optional<List<Long>> id = userRepository.findAny(PageRequest.of(0, 1));
 		Optional<PrincipleGroup> adminGroup = groupRepository.findById(Group.ADMIN.getId());
-		if (id.isEmpty()) {
+		if (id.get().isEmpty()) {
 			user.addUserGroups(adminGroup.get());;
 		} else {
 			user.addUserGroups(groupRepository
