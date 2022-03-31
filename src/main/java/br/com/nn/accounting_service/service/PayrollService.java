@@ -17,11 +17,15 @@ import br.com.nn.accounting_service.repository.UserRepository;
 
 @Service
 public class PayrollService {
-	@Autowired
+
 	PayrollRepository payrollRepository;
+	UserRepository userRepository;
 	
 	@Autowired
-	UserRepository userRepository;
+	public PayrollService(PayrollRepository payrollRepository, UserRepository userRepository) {
+		this.payrollRepository = payrollRepository;
+		this.userRepository = userRepository;
+	}
 
 	public Map<String, String> registerPayrolls(List<PayrollForm> payrolls) {
 		Map<String, List<PayrollForm>> payrollsGrouped = this.groupPayrollsByEmail(payrolls);
