@@ -28,7 +28,6 @@ public class PayrollService {
 		
 		payrollsGrouped.forEach(
 				(email,payrollsList)-> {
-					
 					long user = userRepository.findId(email).orElseThrow(
 							() -> new BadRequestException("Employee: " + email + " not found!"));
 					payrollsList.forEach(payroll -> this.savePayroll(payroll, user, email)
