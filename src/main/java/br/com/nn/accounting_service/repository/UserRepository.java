@@ -17,6 +17,9 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	
 	Optional<User> findByEmailIgnoreCase(String email);
 	
+	@Query("Select u from User u JOIN FETCH u.userGroups where UPPER(u.email)=UPPER(?1)")
+	Optional<User> findWithEmail(String email);
+	
 	@Query("Select u.password from User u where UPPER(u.email)=UPPER(?1)")
 	String getPasswordByEmail(String email);
 	
@@ -26,4 +29,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	
 	@Query("Select u.id from User u")
 	Optional<List<Long>> findAny(Pageable pageable);
+	
+	@Query("Select u.id from User u where UPPER(u.email)=UPPER(?1)")
+	Optional<Long> findId(String email);
 }

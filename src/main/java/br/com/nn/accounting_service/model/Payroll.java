@@ -2,6 +2,7 @@ package br.com.nn.accounting_service.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,9 +22,11 @@ public class Payroll {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
+	@ManyToOne(targetEntity = User.class,fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id",insertable = false, updatable = false)
 	private User user;
+	@Column(name = "user_id")
+	private long userId;
 	private LocalDate period;
 	@Min(0)
 	private long salary;
@@ -31,10 +34,10 @@ public class Payroll {
 	public Payroll() {
 	}
 
-	public Payroll(PayrollForm payroll, User user) {
+	public Payroll(PayrollForm payroll, long userId) {
 		this.period = payroll.getPeriod();
 		this.salary = payroll.getSalary();
-		this.user = user;
+		this.userId = userId;
 	}
 
 	public long getId() {

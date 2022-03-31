@@ -43,7 +43,7 @@ public class User {
 	@ManyToMany(cascade = {
 			CascadeType.PERSIST,
 			CascadeType.MERGE
-	}, fetch = FetchType.EAGER)
+	}, fetch = FetchType.LAZY)
 	@JoinTable(name = "user_groups",
 		joinColumns = @JoinColumn(name = "user_id"),
 		inverseJoinColumns = @JoinColumn(name = "group_id"))
