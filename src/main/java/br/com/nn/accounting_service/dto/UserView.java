@@ -2,9 +2,9 @@ package br.com.nn.accounting_service.dto;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import br.com.nn.accounting_service.model.PrincipleGroup;
+import br.com.nn.accounting_service.model.User;
 
 public class UserView {
 	private long id;
@@ -17,14 +17,14 @@ public class UserView {
 	public UserView() {
 	}
 
-	public UserView(long id, String name, String lastname, String email, Set<PrincipleGroup> roles) {
-		this.id = id;
-		this.name = name;
-		this.lastname = lastname;
-		this.email = email;
-		this.roles = roles.stream().map(PrincipleGroup::getName).sorted().toList();
+	public UserView(User user) {
+		this.id = user.getId();
+		this.name = user.getName();
+		this.lastname = user.getLastname();
+		this.email = user.getEmail();
+		this.roles = user.getUserGroups().stream().map(PrincipleGroup::getName).sorted().toList();
 	}
-
+	
 	public long getId() {
 		return id;
 	}

@@ -50,7 +50,7 @@ public class UserService {
 		} catch (DataIntegrityViolationException e) {
 			throw new BadRequestException("User exist!");
 		}
-		return new UserView(user.getId(), user.getName(), user.getLastname(), user.getEmail(), user.getUserGroups());
+		return new UserView(user);
 	}
 	
 	public void changePass(UserDetailsImpl userDetails, String password) {
@@ -60,6 +60,11 @@ public class UserService {
 		}
 		userRepository
 				.updatePasswordByEmail(userDetails.getUsername(), passwordEncoder.encode(password));
+	}
+
+	public List<UserView> getAllUsers() {
+		List<User> users = userRepository.findAll();
+		return users.stream().map(UserView::new).toList();
 	}
 	
 }
