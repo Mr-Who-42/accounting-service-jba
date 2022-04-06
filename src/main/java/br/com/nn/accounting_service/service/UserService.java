@@ -13,6 +13,7 @@ import br.com.nn.accounting_service.config.security.authentication.UserDetailsIm
 import br.com.nn.accounting_service.dto.UserForm;
 import br.com.nn.accounting_service.dto.UserView;
 import br.com.nn.accounting_service.exception.BadRequestException;
+import br.com.nn.accounting_service.exception.ResourceNotFoundException;
 import br.com.nn.accounting_service.model.PrincipleGroup;
 import br.com.nn.accounting_service.model.User;
 import br.com.nn.accounting_service.repository.PrincipleGroupRepository;
@@ -65,6 +66,21 @@ public class UserService {
 	public List<UserView> getAllUsers() {
 		List<User> users = userRepository.findAll();
 		return users.stream().map(UserView::new).toList();
+	}
+
+	public void deleteUser(String email) {
+		User user = userRepository
+			.findByEmailIgnoreCase(email)
+			.orElseThrow(() -> new ResourceNotFoundException("User not found!"));
+		if (isAdmin(user)) {
+			throw new BadRequestException("Can't remove ADMINISTRATOR role!");
+		}
+		userRepository.delete(user);
+		
+	}
+	
+	private boolean isAdmin(User user) {
+		return user.getUserGroups().stream().findAny().get().getName().equals("ROLE_ADMINISTRATOR");
 	}
 	
 }
