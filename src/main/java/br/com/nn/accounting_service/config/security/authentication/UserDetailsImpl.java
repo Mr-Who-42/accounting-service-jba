@@ -13,12 +13,14 @@ import br.com.nn.accounting_service.model.User;
 public class UserDetailsImpl implements UserDetails{
 
 	private static final long serialVersionUID = 1L;
+	private final long userId;
 	private final String username;
 	private final String password;
 	private final boolean enabled;
 	private final List<GrantedAuthority> rolesAndAuthorities;
 	
 	public UserDetailsImpl(User user) {
+		this.userId = user.getId();
 		this.username = user.getEmail();
 		this.password = user.getPassword();
 		this.enabled = user.isEnabled();
@@ -31,6 +33,10 @@ public class UserDetailsImpl implements UserDetails{
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return rolesAndAuthorities;
+	}
+	
+	public long getUserId() {
+		return userId;
 	}
 
 	@Override
