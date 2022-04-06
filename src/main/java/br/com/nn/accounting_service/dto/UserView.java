@@ -3,7 +3,6 @@ package br.com.nn.accounting_service.dto;
 import java.util.Collections;
 import java.util.List;
 
-import br.com.nn.accounting_service.model.PrincipleGroup;
 import br.com.nn.accounting_service.model.User;
 
 public class UserView {
@@ -16,13 +15,12 @@ public class UserView {
 	
 	public UserView() {
 	}
-
 	public UserView(User user) {
 		this.id = user.getId();
 		this.name = user.getName();
 		this.lastname = user.getLastname();
 		this.email = user.getEmail();
-		this.roles = user.getUserGroups().stream().map(PrincipleGroup::getName).sorted().toList();
+		this.roles = user.getRoles();
 	}
 	
 	public long getId() {

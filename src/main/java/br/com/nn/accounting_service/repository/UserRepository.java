@@ -2,6 +2,7 @@ package br.com.nn.accounting_service.repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,11 +15,14 @@ import br.com.nn.accounting_service.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
 	boolean existsByEmailIgnoreCase(String email);
-	
+		
 	Optional<User> findByEmailIgnoreCase(String email);
 	
 	@Query("Select u from User u JOIN FETCH u.userGroups where UPPER(u.email)=UPPER(?1)")
 	Optional<User> findWithEmail(String email);
+	
+	@Query("Select u FROM User u JOIN FETCH u.userGroups")
+	Set<User> findAllUsers();
 	
 	@Query("Select u.password from User u where UPPER(u.email)=UPPER(?1)")
 	String getPasswordByEmail(String email);

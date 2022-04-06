@@ -126,6 +126,9 @@ public class User {
 		this.payrolls = payrolls;
 	}
 	
+	public List<String> getRoles() {
+		return userGroups.stream().map(PrincipleGroup::getName).sorted().toList();
+	}
 	
 	
 }
