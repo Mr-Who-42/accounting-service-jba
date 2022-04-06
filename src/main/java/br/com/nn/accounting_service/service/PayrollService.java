@@ -3,6 +3,7 @@ package br.com.nn.accounting_service.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,23 @@ public class PayrollService {
 			throw new BadRequestException("User: " + email +
 					 "already has payroll for " + payroll.getPeriod());
 		}
+	}
+
+	public Map<String, String> alterPayroll(PayrollForm payrollForm) {
+		Optional<Long> userId = userRepository.findId(payrollForm.getEmployee());
+		Long id = userId.orElseThrow(() -> 
+						new BadRequestException("Employee: " +
+						                        payrollForm.getEmployee() +
+						                        " not found!"));
+		 Optional<Payroll> optionalPayroll = payrollRepository
+				.findByUserIdAndPeriod(id, payrollForm.getPeriod());
+		 Payroll payroll = optionalPayroll.orElseThrow(() -> 
+				 new BadRequestException("Period not found!"));
+		 payroll.setSalary(payrollForm.getSalary());
+		 payrollRepository.save(payroll);
+		 Map<String, String> response = new HashMap<>();
+		 response.put("status","Updated successfully");
+		 return response;
 	}
 	
 }

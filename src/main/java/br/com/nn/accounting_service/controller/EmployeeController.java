@@ -42,11 +42,8 @@ public class EmployeeController {
 			LocalDate periodFormated = new PayrollForm().formatPeriod(period);
 			try {
 				Payroll payroll = payrollRepository
-						.findByUserIdAndPeriod(user.getId(), periodFormated);
-				if (payroll == null) {
-					throw new BadRequestException("Period Invalid");
-				}
-				
+						.findByUserIdAndPeriod(user.getId(), periodFormated)
+						.orElseThrow(() -> new BadRequestException("Period Invalid"));
 				return ResponseEntity.ok(new UserPayrollView(
 						user.getName(),
 						user.getLastname(),
