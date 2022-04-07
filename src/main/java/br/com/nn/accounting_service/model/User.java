@@ -1,6 +1,8 @@
 package br.com.nn.accounting_service.model;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -32,12 +35,15 @@ public class User {
 	private String email;
 	@NotBlank
 	private String password;
+	@OneToMany(mappedBy = "user")
+	private List<Payroll> payrolls;
+	
 	@NotNull
 	private boolean enabled = true;
 	@ManyToMany(cascade = {
 			CascadeType.PERSIST,
 			CascadeType.MERGE
-	}, fetch = FetchType.EAGER)
+	}, fetch = FetchType.LAZY)
 	@JoinTable(name = "user_groups",
 		joinColumns = @JoinColumn(name = "user_id"),
 		inverseJoinColumns = @JoinColumn(name = "group_id"))
@@ -111,7 +117,18 @@ public class User {
 	public void setUserGroups(Set<PrincipleGroup> userGroups) {
 		this.userGroups = userGroups;
 	}
+
+	public List<Payroll> getPayrolls() {
+		return Collections.unmodifiableList(this.payrolls);
+	}
+
+	public void setPayrolls(List<Payroll> payrolls) {
+		this.payrolls = payrolls;
+	}
 	
+	public List<String> getRoles() {
+		return userGroups.stream().map(PrincipleGroup::getName).sorted().toList();
+	}
 	
 	
 }
